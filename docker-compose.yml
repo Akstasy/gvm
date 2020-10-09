@@ -1,9 +1,5 @@
 version: '3.2'
 
-volumes:
-  pg_socket:
-  redis_socket:
-
 services:
   gvm:
       restart: always
@@ -21,25 +17,4 @@ services:
       volumes:
         - ./scripts/gvm:/init
         - ./data/gvm:/data
-        - pg_socket:/var/run/postgresql
-        - redis_socket:/run/redis
-      depends_on:
-        - postgres
-        - redis
-  postgres:
-    restart: always
-    image: docker.partechpartner.com/postgres:gvm
-    volumes:
-      - ./data/postgres:/var/lib/postgresql/data
-      - pg_socket:/var/run/postgresql
-    # environment:
-    #   - POSTGRES_PASSWORD=pgpassword
-    network_mode: none
-  redis:
-    restart: always
-    image: redis
-    command: ['/init/start.sh']
-    volumes:
-      - ./conf/redis/redis.conf:/etc/redis.conf
-      - ./scripts/redis/:/init
-      - redis_socket:/run/redis
+	- ./scripts/gvm/add-scanner.sh:/add-scanner.sh
