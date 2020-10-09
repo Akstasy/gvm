@@ -50,15 +50,7 @@ fi
 chown postgres:postgres -R /data/database
 
 echo "Starting PostgreSQL..."
-
-function restartPgsql() {
-    systemctl restart postgresql
-    until pg_isready ; do echo ... && sleep 5 ; done
-}
-# su -c "/usr/lib/postgresql/12/bin/pg_ctl -D /data/database start" postgres
-
-restartPgsql
-
+su -c "/usr/lib/postgresql/12/bin/pg_ctl -D /data/database start" postgres
 
 if  [ ! -d /data/ssh ]; then
 	echo "Creating SSH folder..."
@@ -118,8 +110,7 @@ if [ ! -f "/data/firstrun" ]; then
 	
 	chown postgres:postgres -R /data/database
 	
-	# su -c "/usr/lib/postgresql/12/bin/pg_ctl -D /data/database restart" postgres
-	restartPgsql
+	su -c "/usr/lib/postgresql/12/bin/pg_ctl -D /data/database restart" postgres
 	
 	touch /data/firstrun
 fi
